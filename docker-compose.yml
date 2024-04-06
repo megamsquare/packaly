@@ -1,0 +1,27 @@
+version: '3.1'
+
+services:
+  database:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    ports:
+      - '27017:27017'
+    volumes:
+      - ./data:/data/db
+
+  order_api:
+    build: .
+    container_name: order_api
+    ports:
+      - '3000:3000'
+    depends_on:
+      - database
+    env_file:
+      - .env
+    volumes:
+      - ./src:/app/src
+      - ./package.json:/app/package.json
+
+volumes:
+  data: {}
